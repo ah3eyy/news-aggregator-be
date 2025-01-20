@@ -56,7 +56,7 @@ class ArticleController extends Controller
                 return $query->orWhereIn('category', $category);
             })
             ->when($source, function ($query) use ($source) {
-                return $query->orWhereIn('source', $source);
+                return $query->orWhereIn('source->name', $source);
             })
             ->when($author, function ($query) use ($author) {
                 return $query->orWhereIn('author', $author);
