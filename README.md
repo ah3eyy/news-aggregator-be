@@ -16,7 +16,7 @@
         cd your-repo-name
 
     2. Create an Environment File and Install 
-       Create a .env file in the root of the project. This file contains environment variables used by the React application.
+       Create a .env file in the root of the project. This file contains environment variables used by the larevel application.
        cp .env.example .env
         
        After creating .env 
@@ -26,6 +26,13 @@
          cd {root of application}
          sudo chmod -R 775 storage
          sudo chown -R $(whoami):staff storage
+        
+         Run the following artisan command
+             php artisan cache:clear
+             php artisan config:clear
+             php artisan config:cache
+             php artisan view:clear
+             php artisan view:cache
 
     4. Build and Run with Docker
        Ensure Docker is running on your machine, then proceed with the following:
@@ -37,4 +44,8 @@
          docker compose up -t
     
     5. Application ready on http://127.0.0.1:8000
+    
+    6. Run php artisan app:spool-article spool command 
+
+    Note : The schedule command is set to run twice daily 
 

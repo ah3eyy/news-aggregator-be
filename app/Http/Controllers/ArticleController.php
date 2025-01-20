@@ -61,6 +61,7 @@ class ArticleController extends Controller
             ->when($author, function ($query) use ($author) {
                 return $query->orWhereIn('author', $author);
             })
+            ->orderBy('published_date', 'DESC')
             ->paginate($pageSize);
 
         return $this->successResponse($article, 'Article retrieved successfully.');

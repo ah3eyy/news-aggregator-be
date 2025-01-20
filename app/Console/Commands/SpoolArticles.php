@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchArticleByCategoryJob;
-use App\Jobs\FetchArticleByPaginationJob;
 use App\Models\Article;
+use App\Services\ArticleService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -47,8 +46,9 @@ class SpoolArticles extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(): int
     {
+        $articleService = app(ArticleService::class);
         foreach ($this->sources as $provider => $providerUrl) {
             $providerUrl = $this->sources[$provider]['url'];
             $authKey = $this->sources[$provider]['authKey'];
@@ -70,18 +70,19 @@ class SpoolArticles extends Command
                 $queryParams .= "&{$authKey}={$token}";
 
                 if ($this->sources[$provider]['type'] === 'paginated') {
-                    FetchArticleByPaginationJob::dispatch($url, $queryParams, $provider);
+                    $articleService->spoolRecordByPagination($url, $queryParams, $provider);
                 }
 
                 if ($this->sources[$provider]['type'] === 'categories') {
                     $categories = $this->sources[$provider]['categories'];
-                    FetchArticleByCategoryJob::dispatch($url, $queryParams, $provider, $categories);
+                    $articleService->spoolRecordByCategory($url, $queryParams, $provider, $categories);
                 }
 
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
             }
         }
+        return 0;
     }
 
     public function formatDate($start_date, $end_date, $provider): array
