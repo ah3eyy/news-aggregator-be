@@ -33,6 +33,8 @@
              php artisan config:cache
              php artisan view:clear
              php artisan view:cache
+             php artisan install:api --passport
+             php artisan passport:client
 
     4. Build and Run with Docker
        Ensure Docker is running on your machine, then proceed with the following:
